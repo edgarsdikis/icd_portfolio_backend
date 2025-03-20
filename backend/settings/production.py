@@ -31,16 +31,45 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
 X_FRAME_OPTIONS = 'DENY'
 
-# CORS settings - restrict to your frontend domain
+# CORS settings - with proper domain handling
 CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = [
-    f"https://{os.environ.get('FRONTEND_DOMAIN', 'icd-frontend-five.vercel.app')}",
-]
+
+# Process frontend domain to handle protocol and trailing slashes
+frontend_domain = os.environ.get('FRONTEND_DOMAIN', 'icd-frontend-five.vercel.app')
+if frontend_domain.endswith('/'):
+    frontend_domain = frontend_domain.rstrip('/')
+if frontend_domain.startswith('https://') or frontend_domain.startswith('http://'):
+    # Domain already has protocol
+    cors_frontend_url = frontend_domain
+else:
+    # Add protocol
+    cors_frontend_url = f"https://{frontend_domain}"
+
+# Process allowed host similarly
+allowed_host = os.environ.get('ALLOWED_HOST', 'portfolio-tracker-api-173r.onrender.com')
+if allowed_host.endswith('/'):
+    allowed_host = allowed_host.rstrip('/')
+if allowed_host.startswith('https://') or allowed_host.startswith('http://'):
+    # Domain already has protocol
+    cors_allowed_host = allowed_host
+else:
+    # Add protocol
+    cors_allowed_host = f"https://{allowed_host}"
+
+# Apply processed URLs
+CORS_ALLOWED_ORIGINS = [cors_frontend_url]
+
+# Also add localhost URLs for development if needed
+CORS_ALLOWED_ORIGINS.extend([
+    "http://localhost:5173",
+    "http://localhost:3000"
+])
+
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
-    f"https://{os.environ.get('ALLOWED_HOST', 'portfolio-tracker-api-173r.onrender.com')}",
-    f"https://{os.environ.get('FRONTEND_DOMAIN', 'icd-frontend-five.vercel.app')}",
+    cors_allowed_host,
+    cors_frontend_url
 ]
 
 # Static files
