@@ -1,7 +1,7 @@
 import os
-# Use a separate environment variable for determining which settings to load
-django_env = os.environ.get('DJANGO_ENVIRONMENT', 'development')
-if django_env == 'production':
+# Use consistent environment variable name
+django_settings = os.environ.get('DJANGO_SETTINGS_MODULE', 'backend.settings.development')
+if django_settings.endswith('production'):
     from .production import *
 else:
     from .development import *
