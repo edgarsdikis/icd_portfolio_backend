@@ -10,7 +10,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 MORALIS_API_KEY = os.environ.get('MORALIS_API_KEY')
 
 # Update with your actual domain
-ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST', 'your-production-domain.com')]
+ALLOWED_HOSTS = [os.environ.get('ALLOWED_HOST', 'https://portfolio-tracker-api-173r.onrender.com')]
 
 # Configure PostgreSQL using DATABASE_URL environment variable
 DATABASES = {
