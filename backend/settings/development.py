@@ -18,10 +18,11 @@ DATABASES = {
     }
 }
 
-# Enable CORS for development
+# In backend/settings/development.py
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CSRF_TRUSTED_ORIGINS = [
     "https://iscryptodead.loca.lt",
     "http://localhost:3000",
+    "https://icd-frontend-five.vercel.app"  # Add your frontend URL here
 ]
